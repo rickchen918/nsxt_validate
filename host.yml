@@ -1,0 +1,25 @@
+all:
+  children:
+    manager:
+      hosts:
+        192.168.0.40:
+      vars:
+        ansible_ssh_user: admin
+        ansible_ssh_pass: Nicira123$
+
+    controller:
+      hosts:
+        192.168.0.41:
+        192.168.0.47:
+        192.168.0.48:
+      vars:
+        ansible_ssh_user: admin
+        ansible_ssh_pass: Nicira123$
+
+    host:
+      hosts:
+        192.168.0.[45:46]:
+
+      vars:
+        ansible_ssh_user: root
+        ansible_ssh_pass: Nicira123$

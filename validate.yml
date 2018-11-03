@@ -1,0 +1,69 @@
+---
+- hosts: manager
+  gather_facts: no
+  tasks:
+# check nsx manager
+    - name: check management cluster status on manager
+      raw: get management-cluster status
+      register: mgr
+      failed_when: "'STABLE' not in mgr.stdout_lines[3]"
+
+    - name: check controller cluster status on manager
+      raw: get management-cluster status
+      register: mgr
+      failed_when: "'STABLE' not in mgr.stdout_lines[10]"
+
+#    - debug:
+#        var: mgr.stdout_lines[10]
+
+- hosts: controller
+  gather_facts: no
+  tasks:
+    - name: check manager connecting 
+      raw: get managers
+      register: getmgr
+      failed_when: "'Connected' not in getmgr.stdout_lines[0]"
+
+#    - debug:
+#        var: getmgr.stdout_lines
+
+    - name: check controller cluster status 
+      raw: get control-cluster status
+      register: cluster
+      failed_when: "'true' not in cluster.stdout_lines[2]"
+
+#    - debug:
+#        var: cluster.stdout_lines[2]
+
+
+- hosts: host
+  gather_facts: no
+  tasks:
+    - name: check manager connection
+      raw: nsxcli -c get managers
+      register: mgrconn
+      failed_when: "'Connected' not in mgrconn.stdout_lines[0]"
+#    - debug:
+#        var: mgrconn.stdout_lines
+
+    - name: check controller connection
+      raw: nsxcli -c get controllers
+      register: ctrconn
+      failed_when: "'connected' not in ctrconn.stdout"
+#    - debug: 
+#        var: ctrconn.stdout_lines[2]
+
+
+
+# check ntp configuration 
+#    - name: check ntp configuration 
+#      raw: get ntp-servers
+#      register: result
+#      failed_when: "'time.stdtime.gov.tw' not in result.stdout_lines"
+
+#    - debug:
+#        var: result
+
+# for pks lab only, connfigure route to pks subnet 
+#    - name: set static route to 192.168.64.0/18 
+#      raw:  set route prefix 192.168.64.0/18 gateway 192.168.0.59 
