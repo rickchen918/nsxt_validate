@@ -16,6 +16,7 @@
 #    - debug:
 #        var: mgr.stdout_lines[10]
 
+# check nsx controller 
 - hosts: controller
   gather_facts: no
   tasks:
@@ -35,6 +36,27 @@
 #    - debug:
 #        var: cluster.stdout_lines[2]
 
+# check nsx edge
+- hosts: edge
+  gather_facts: no
+  tasks:
+    - name: check manager connecting
+      raw: get managers
+      register: edgemgr
+      failed_when: "'Connected' not in edgemgr.stdout"
+
+#    - debug:
+#        var: edgemgr.stdout_lines
+
+    - name: check controller cluster status
+      raw: get controllers
+      register: edgectr
+      failed_when: "'connected' not in edgectr.stdout"
+#    - debug:
+#        var: edgectr.stdout_lines
+
+
+# check nsx hosts
 
 - hosts: host
   gather_facts: no
