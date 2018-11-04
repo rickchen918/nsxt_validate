@@ -76,16 +76,6 @@
 #        var: ctrconn.stdout_lines[2]
 
 
-
-# check ntp configuration 
-#    - name: check ntp configuration 
-#      raw: get ntp-servers
-#      register: result
-#      failed_when: "'time.stdtime.gov.tw' not in result.stdout_lines"
-
-#    - debug:
-#        var: result
-
 # for pks lab only, connfigure route to pks subnet 
 #    - name: set static route to 192.168.64.0/18 
 #      raw:  set route prefix 192.168.64.0/18 gateway 192.168.0.59 
