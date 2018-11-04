@@ -95,6 +95,18 @@
       failed_when: log.stdout_lines[0] is undefined or "{{ misc.log }}" not in log.stdout_lines[0]
 
 
+- hosts: host
+  gather_facts: no
+  any_errors_fatal: true
+  tasks:
+    - name: mtu ping 
+      raw: 'vmkping ++netstack=vxlan -d -s 1572 "{{ item }}"'
+      with_items:
+        - "{{groups['vtep']}}"
+      register: ping
+#      failed_when: "'100% packet loss' in ping.stdout_lines" or "'Message too long' in ping.stdout_lines"
+
+
 # for pks lab only, connfigure route to pks subnet 
 #    - name: set static route to 192.168.64.0/18 
 #      raw:  set route prefix 192.168.64.0/18 gateway 192.168.0.59 
