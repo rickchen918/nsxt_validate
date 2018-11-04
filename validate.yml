@@ -100,12 +100,13 @@
   any_errors_fatal: true
   tasks:
     - name: mtu ping 
-      raw: 'vmkping ++netstack=vxlan -d -s 1572 "{{ item }}"'
+      command: 'vmkping ++netstack=vxlan -d -s 1574 "{{ item }}"'
       with_items:
         - "{{groups['vtep']}}"
       register: ping
-#      failed_when: "'100% packet loss' in ping.stdout_lines" or "'Message too long' in ping.stdout_lines"
-
+#      failed_when: ping.stdout is undefined
+      tags:
+        - ping
 
 # for pks lab only, connfigure route to pks subnet 
 #    - name: set static route to 192.168.64.0/18 
