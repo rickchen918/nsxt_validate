@@ -78,6 +78,7 @@
 #    - debug: 
 #        var: ctrconn.stdout_lines[2]
 
+# check nsx components ntp/log configuration 
 - hosts: manager,controller,edge
   gather_facts: no
   any_errors_fatal: true
@@ -94,7 +95,28 @@
       register: log
       failed_when: log.stdout_lines[0] is undefined or "{{ misc.log }}" not in log.stdout_lines[0]
 
-
+# check host ntp/log configuration 
+- hosts: host
+  gather_facts: no                                                                                                                       
+  any_errors_fatal: true                                                                                                                 
+  vars_files:                                                                                                                            
+    - ./var.yml
+  tasks:
+    - name: check ntp server configuration 
+      command: cat /etc/ntp.conf
+      register: ntp
+      failed_when: ntp.stdout in undefined or "{{ misc.ntp }}" not in ntp.stdout_lines
+      tags:
+        - ntp
+  
+    - name: check log configuration 
+      command: esxcli system syslog config get
+      register: log
+      failed_when: log.stdout_lines[11] is undefined or "{{ misc.log }}" not in log.stdout_lines[11]
+      tags:
+        - log
+         
+# check vsphere mtu result 
 - hosts: host
   gather_facts: no
   any_errors_fatal: true
