@@ -99,12 +99,11 @@
   gather_facts: no
   any_errors_fatal: true
   tasks:
-    - name: mtu ping 
-      command: 'vmkping ++netstack=vxlan -d -s 1574 "{{ item }}"'
+    - name: TEP ping with mtu specificed 
+      command: 'vmkping ++netstack=vxlan -d -s 1572 "{{ item }}"'
       with_items:
         - "{{groups['vtep']}}"
       register: ping
-#      failed_when: ping.stdout is undefined
       tags:
         - ping
 
