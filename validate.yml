@@ -16,8 +16,6 @@
       register: mgr
       failed_when: "'STABLE' not in mgr.stdout_lines[10]"
 
-#    - debug:
-#        var: mgr.stdout_lines[10]
 
 # check nsx controller 
 - hosts: controller
@@ -28,16 +26,11 @@
       register: getmgr
       failed_when: "'Connected' not in getmgr.stdout_lines[0]"
 
-#    - debug:
-#        var: getmgr.stdout_lines
-
     - name: check controller cluster status on controller nodes
       raw: get control-cluster status
       register: cluster
       failed_when: "'true' not in cluster.stdout_lines[2]"
 
-#    - debug:
-#        var: cluster.stdout_lines[2]
 
 # check nsx edge
 - hosts: edge
@@ -48,19 +41,13 @@
       register: edgemgr
       failed_when: "'Connected' not in edgemgr.stdout"
 
-#    - debug:
-#        var: edgemgr.stdout_lines
-
     - name: check controller connecting on edge 
       raw: get controllers
       register: edgectr
       failed_when: "'connected' not in edgectr.stdout"
-#    - debug:
-#        var: edgectr.stdout_lines
 
 
 # check nsx hosts
-
 - hosts: host
   gather_facts: no
   tasks:
@@ -68,15 +55,12 @@
       raw: nsxcli -c get managers
       register: mgrconn
       failed_when: "'Connected' not in mgrconn.stdout_lines[0]"
-#    - debug:
-#        var: mgrconn.stdout_lines
 
     - name: check controller connection on hosts
       raw: nsxcli -c get controllers
       register: ctrconn
       failed_when: "'connected' not in ctrconn.stdout"
-#    - debug: 
-#        var: ctrconn.stdout_lines[2]
+
 
 # check nsx components ntp/log configuration 
 - hosts: manager,controller,edge
@@ -94,6 +78,7 @@
       raw: get logging-servers
       register: log
       failed_when: log.stdout_lines[0] is undefined or "{{ misc.log }}" not in log.stdout_lines[0]
+
 
 # check host ntp/log configuration 
 - hosts: host
@@ -115,6 +100,7 @@
       failed_when: log.stdout_lines[11] is undefined or "{{ misc.log }}" not in log.stdout_lines[11]
       tags:
         - log
+
          
 # check vsphere mtu result 
 - hosts: host
