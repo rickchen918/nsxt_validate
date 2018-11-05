@@ -8,16 +8,10 @@
     - name: check ntp server configuration 
       raw: get ntp-server
       register: ntp
-
-    - debug:
-        var: ntp.stdout_lines[0]
      
     - name: check log server configuration
       raw: get logging-servers
       register: log
-
-    - debug:
-        var: log.stdout_lines[0]
 
     - name: configure ntp server 
       raw: set ntp-server {{ misc.ntp }}
