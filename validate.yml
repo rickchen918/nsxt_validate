@@ -70,10 +70,17 @@
     - ./var.yml
   tasks:
     - name: check ntp server configuration 
-      raw: get ntp-server
+      raw: get ntp-server 
       register: ntp
       failed_when: ntp.stdout_lines[0] is undefined or ntp.stdout_lines[0] !=  "{{ misc.ntp }}"
   
+    - name: get ntp sync status 
+      raw: get ntp-server associations 
+      register: assoc
+      failed_when: "'No association ID' in assoc.stdout or 'INIT' in assoc.stdout"
+      tags:
+        - assoc 
+
     - name: check log server configuration 
       raw: get logging-servers
       register: log

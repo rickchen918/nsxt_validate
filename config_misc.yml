@@ -21,3 +21,41 @@
       raw: set logging-server {{ misc.log }}:514 proto udp level warning
       when: log.stdout_lines[0] is undefined or "{{ misc.log }}" not in log.stdout_lines[0] 
 
+- hosts: host
+  gather_facts: no
+  vars_files:
+    - ./var.yml
+  tasks:
+
+    - name: check ntp configuration in host 
+      command: cat /etc/ntp.conf
+      register: ntp
+      tags:
+        - host
+
+    - lineinfile:
+        path: /etc/ntp.conf
+        line: server {{ misc.ntp }}
+        create: yes
+      when: '"{{ misc.ntp }}" not in ntp'
+      tags:
+        - host
+
+    - name: check ntpd service 
+      command: /etc/init.d/ntpd status
+      ignore_errors: yes
+      register: svc1
+      tags:
+        - host 
+
+    - name: check ntpq -p 
+      command: ntpq -p 
+      register: svc2
+      tags:
+        - host
+
+    - name: start ntp service 
+      command: /etc/init.d/ntpd restart
+      when: '"ntpd is running" not in svc1.stdout or "INIT" in svc2.stdout'
+      tags: 
+        - host    
