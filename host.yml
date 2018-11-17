@@ -2,35 +2,35 @@ all:
   children:
     manager:
       hosts:
-        192.168.0.40:
+        192.168.0.102:
       vars:
         ansible_ssh_user: admin
         ansible_ssh_pass: Nicira123$
 
     controller:
       hosts:
-        192.168.0.41:
-        192.168.0.47:
-        192.168.0.48:
+        192.168.0.108:
+        192.168.0.109:
+        192.168.0.110:
       vars:
         ansible_ssh_user: admin
         ansible_ssh_pass: Nicira123$
 
     edge:
       hosts:
-        192.168.0.[43:44]:
+        192.168.0.[111:113]:
       vars:
         ansible_ssh_user: admin
         ansible_ssh_pass: Nicira123$
 
     host:
       hosts:
-        192.168.0.[45:46]:
-
+        192.168.0.[238:239]:
+        192.168.0.[179:180]:
       vars:
         ansible_ssh_user: root
         ansible_ssh_pass: Nicira123$
 
     vtep:
       hosts:
-        192.168.65.[200:203]:
+        192.168.65.[144:150]:

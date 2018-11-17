@@ -8,10 +8,12 @@
     - name: check ntp server configuration 
       raw: get ntp-server
       register: ntp
+      changed_when: false
      
     - name: check log server configuration
       raw: get logging-servers
       register: log
+      changed_when: false
 
     - name: configure ntp server 
       raw: set ntp-server {{ misc.ntp }}
@@ -26,10 +28,14 @@
   vars_files:
     - ./var.yml
   tasks:
+   
+    - name: disable ipv6 
+      command: esxcli network ip set --ipv6-enabled=false
 
     - name: check ntp configuration in host 
       command: cat /etc/ntp.conf
       register: ntp
+      changed_when: false
       tags:
         - host
 
@@ -45,12 +51,14 @@
       command: /etc/init.d/ntpd status
       ignore_errors: yes
       register: svc1
+      changed_when: false
       tags:
         - host 
 
     - name: check ntpq -p 
       command: ntpq -p 
       register: svc2
+      changed_when: false
       tags:
         - host
 

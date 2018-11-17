@@ -1,0 +1,12 @@
+# pingtesting 
+---
+- hosts: 127.0.0.1
+  tasks:
+    - name: ping test 
+      command: ping -c 3 "{{ item }}"
+      register: ping
+#      failed_when: "Destination Host Unreachable" in  ping.stdout
+      loop:
+        - 192.168.0.1
+        - 192.168.0.7
+        - 192.168.0.55
