@@ -115,11 +115,6 @@
       tags:                                                                                            
         - ntp
 
-    - debug:
-        var: ntpsvc2.stdout
-      tags:                                                                                            
-        - ntp
-
     - name: check log configuration 
       command: esxcli system syslog config get
       register: log
