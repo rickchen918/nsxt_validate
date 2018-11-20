@@ -101,6 +101,25 @@
       tags:
         - ntp
 
+    - name: check ntp service 
+      command: /etc/init.d/ntpd status
+      register: ntpsvc1
+      failed_when: ntpsvc1.stdout_lines[0] != "ntpd is running"
+      tags:
+        - ntp
+
+    - name: check ntp sync
+      raw: ntpq -p |grep -i '.init.' |awk '{print $2}'
+      register: ntpsvc2                                                                                   
+      failed_when: ntpsvc2.stdout_lines[0] == ".INIT."                                                                 
+      tags:                                                                                            
+        - ntp
+
+    - debug:
+        var: ntpsvc2.stdout
+      tags:                                                                                            
+        - ntp
+
     - name: check log configuration 
       command: esxcli system syslog config get
       register: log
