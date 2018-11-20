@@ -25,12 +25,11 @@ all:
 
     host:
       hosts:
-        192.168.0.[238:239]:
-        192.168.0.[179:180]:
+        192.168.0.[121:126]:
       vars:
         ansible_ssh_user: root
         ansible_ssh_pass: Nicira123$
 
     vtep:
       hosts:
-        192.168.65.[144:150]:
+        192.168.65.[144:152]:
