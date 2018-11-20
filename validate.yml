@@ -101,11 +101,6 @@
       tags:
         - ntp
 
-    - debug:
-        var: ntp.stdout_lines[0]
-      tags:                                                                                            
-        - ntp  
-
     - name: check log configuration 
       command: esxcli system syslog config get
       register: log
