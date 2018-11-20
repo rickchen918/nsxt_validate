@@ -89,18 +89,23 @@
 
 # check host ntp/log configuration 
 - hosts: host
-  gather_facts: no                                                                                                                       
-  any_errors_fatal: true                                                                                                                 
-  vars_files:                                                                                                                            
-    - ./var.yml
+  gather_facts: no                                                                                                    
+  any_errors_fatal: true                                                                                               
+  vars_files:                                                                                                        
+     - ./var.yml
   tasks:
     - name: check ntp server configuration 
-      command: cat /etc/ntp.conf
+      raw: grep "{{ misc.ntp }}" /etc/ntp.conf |awk '{print $2}'
       register: ntp
-      failed_when: ntp.stdout in undefined or "{{ misc.ntp }}" not in ntp.stdout_lines
+      failed_when: ntp.stdout_lines[0] != "{{misc.ntp}}"
       tags:
         - ntp
-  
+
+    - debug:
+        var: ntp.stdout_lines[0]
+      tags:                                                                                            
+        - ntp  
+
     - name: check log configuration 
       command: esxcli system syslog config get
       register: log
@@ -110,7 +115,7 @@
 
          
 # check vsphere mtu result 
-- hosts: host
+- hosts: 192.168.0.121
   gather_facts: no
   any_errors_fatal: true
   tasks:
