@@ -109,10 +109,10 @@
         - ntp
 
     - name: check ntp sync
-      raw: ntpq -p |grep -i '.init.' |awk '{print $2}'
-      register: ntpsvc2                                                                                   
-      failed_when: ntpsvc2.stdout_lines[0] == ".INIT."                                                                 
-      tags:                                                                                            
+      raw: ntpq -p |grep -i '{{misc.ntp}}' |awk '{print $1}'
+      register: ntpsvc2
+      failed_when: ntpsvc2.stdout_lines[0] != '*{{misc.ntp}}'
+      tags:
         - ntp
 
     - name: check log configuration 
